@@ -28,7 +28,7 @@ This repository contains the submission for the Full-Stack Blogging Platform ass
 
 ## Features Implemented
 
-This project successfully implements all core and expected features, with a few bonus features completed as time allowed.
+This project successfully implements all core and expected features, with bonus features completed as time allowed.
 
 ### 🔴 Must Have (Core Requirements)
 
@@ -54,10 +54,10 @@ This project successfully implements all core and expected features, with a few 
 
 -   [x] **SEO meta tags** (dynamic and static)
 -   [x] **Image upload for posts** (via Cloudinary)
--   [ ] Search functionality for posts
--   [ ] Post statistics (word count, reading time)
--   [ ] Dark mode support
--   [ ] Pagination
+-   [x] Search functionality for posts
+-   [x] Post statistics (word count, reading time)
+-   [x] Dark mode support
+-   [x] Pagination
 
 ## Tech Stack
 
