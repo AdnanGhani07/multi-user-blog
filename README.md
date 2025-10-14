@@ -1,6 +1,6 @@
 # Full-Stack Blogging Platform
 
-This repository contains the submission for the Full-Stack Blogging Platform assessment. It is a modern, full-stack, type-safe blogging application built with a type-safe, end-to-end stack featuring Next.js 15, tRPC, Drizzle ORM, and PostgreSQL. The application allows for complete management of blog posts and categories, with a focus on code quality, clean architecture, and modern development practices.
+This repository contains the submission for the Full-Stack Blogging Platform. It is a modern, full-stack, type-safe blogging application built with a type-safe, end-to-end stack featuring Next.js 15, tRPC, Drizzle ORM, and PostgreSQL. The application allows for complete management of blog posts and categories, with a focus on code quality, clean architecture, and modern development practices.
 
 **Live Deployment Link:** [https://multi-user-blog-iota.vercel.app/](https://multi-user-blog-iota.vercel.app/)
 
@@ -131,6 +131,8 @@ DATABASE_URL="postgresql://..."
 # Cloudinary - For Image Uploads (Bonus Feature)
 # Your Cloudinary project's "Cloud Name"
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="..."
+CLOUDINARY_API_KEY=".."
+CLOUDINARY_API_SECRET="..."
 # The name of an "Unsigned" upload preset you create in Cloudinary settings
 NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="..."
 ```
