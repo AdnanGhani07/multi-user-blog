@@ -167,7 +167,7 @@ export default function CategoryManagementPage() {
                 // Display mode
                 <>
                   <div>
-                    <h3 className="text-lg font-semibold">{category.name} ({category.slug})</h3>
+                    <h3 className="text-lg font-semibold">{category.name}</h3>
                     <p className="text-sm text-gray-600">{category.description}</p>
                   </div>
                   <div className="flex space-x-2 mt-2 md:mt-0">
