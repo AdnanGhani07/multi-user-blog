@@ -15,7 +15,7 @@ export const posts = pgTable('posts', {
 
 export const categories = pgTable('categories', {
   id: serial('id').primaryKey(),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
   slug: text('slug').unique().notNull(),
   description: text('description'),
 });
