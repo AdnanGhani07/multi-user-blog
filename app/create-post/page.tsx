@@ -104,7 +104,7 @@ export default function CreatePost() {
       });
 
       if (!response.ok) {
-        let errorData: any = {};
+        let errorData: { message?: string; error?: { message?: string } } = {};
         try {
           errorData = await response.json();
         } catch (jsonError) {
