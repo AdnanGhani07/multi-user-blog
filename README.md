@@ -2,7 +2,7 @@
 
 This repository contains the submission for the Full-Stack Blogging Platform assessment. It is a modern, full-stack, type-safe blogging application built with a type-safe, end-to-end stack featuring Next.js 15, tRPC, Drizzle ORM, and PostgreSQL. The application allows for complete management of blog posts and categories, with a focus on code quality, clean architecture, and modern development practices.
 
-**Live Deployment Link:** [https://your-live-deployment-url.vercel.app](https://your-live-deployment-url.vercel.app)
+**Live Deployment Link:** [https://multi-user-blog-iota.vercel.app/](https://multi-user-blog-iota.vercel.app/)
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
