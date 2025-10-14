@@ -131,6 +131,8 @@ DATABASE_URL="postgresql://..."
 # Cloudinary - For Image Uploads (Bonus Feature)
 # Your Cloudinary project's "Cloud Name"
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="..."
+CLOUDINARY_API_KEY=".."
+CLOUDINARY_API_SECRET="..."
 # The name of an "Unsigned" upload preset you create in Cloudinary settings
 NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="..."
 ```
