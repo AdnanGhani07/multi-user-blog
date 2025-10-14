@@ -339,4 +339,25 @@ export const postsRouter = router({
 
       return { success: true, postId: deletedPost.id };
     }),
+
+    togglePublishStatus: publicProcedure
+        .input(
+            z.object({
+                id: z.number(),
+                currentStatus: z.boolean(),
+            })
+        )
+        .mutation(async ({ input }) => {
+            const updatedPost = await db
+                .update(posts)
+                .set({ published: !input.currentStatus })
+                .where(eq(posts.id, input.id))
+                .returning(); // Use .returning() to get the updated record
+
+            if (updatedPost.length === 0) {
+                throw new Error("Post not found or could not be updated.");
+            }
+
+            return updatedPost[0];
+        }),
 });
