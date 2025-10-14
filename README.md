@@ -139,7 +139,7 @@ NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="..."
 
 The seed script (`/db/seed.ts`) is used to populate the database with initial data. As per the assignment, this is primarily used to seed a list of predefined post categories to make testing the filtering functionality easier.
 
--   **To run the seed script:** `npm run db:seed`
+-   **To run the seed script:** `npx tsx db/seed.ts`
 -   **To modify the seed data:** Edit the `data` array within `/db/seed.ts` and re-run the script.
 
 ## tRPC Router Structure
