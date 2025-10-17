@@ -1,5 +1,10 @@
 import { publicProcedure, router } from "../trpc";
-import { posts, postsToCategories, categories, anonymousReadProgress } from "@/db/schema";
+import {
+  posts,
+  postsToCategories,
+  categories,
+  anonymousReadProgress,
+} from "@/db/schema";
 import { z } from "zod";
 import { db } from "@/db";
 import { eq, desc, ilike, and, sql, ne } from "drizzle-orm";
@@ -155,7 +160,14 @@ export const postsRouter = router({
         eq(posts.published, true), // Assuming 'status' field exists and is 'published'
         search ? ilike(posts.title, `%${search}%`) : undefined,
         categorySlugs && categorySlugs.length > 0
-          ? sql`${posts.id} IN ${db.select({ postId: postsToCategories.postId }).from(postsToCategories).leftJoin(categories, eq(postsToCategories.categoryId, categories.id)).where(sql`${categories.slug} IN ${categorySlugs}`)}`
+          ? sql`${posts.id} IN ${db
+              .select({ postId: postsToCategories.postId })
+              .from(postsToCategories)
+              .leftJoin(
+                categories,
+                eq(postsToCategories.categoryId, categories.id)
+              )
+              .where(sql`${categories.slug} IN ${categorySlugs}`)}`
           : undefined
       );
 
@@ -170,9 +182,12 @@ export const postsRouter = router({
             },
           },
           // --- NEW: Conditionally fetch anonymous user's reading progress for this post ---
-          anonymousReadProgress: anonymousUserId ? {
-            where: (progress, { eq }) => eq(progress.anonymousUserId, anonymousUserId),
-          } : undefined,
+          anonymousReadProgress: anonymousUserId
+            ? {
+                where: (progress, { eq }) =>
+                  eq(progress.anonymousUserId, anonymousUserId),
+              }
+            : undefined,
         },
         orderBy: (posts, { desc }) => desc(posts.createdAt),
       });
@@ -182,7 +197,10 @@ export const postsRouter = router({
         .from(posts)
         .where(whereClause);
 
-      const [postsResult, totalPostsResult] = await Promise.all([postsQuery, totalPostsQuery]);
+      const [postsResult, totalPostsResult] = await Promise.all([
+        postsQuery,
+        totalPostsQuery,
+      ]);
 
       const totalPosts = totalPostsResult[0].count;
       const totalPages = Math.ceil(totalPosts / pageSize);
@@ -316,48 +334,54 @@ export const postsRouter = router({
     }),
 
   deletePost: publicProcedure
-    .input(z.object({ id: z.number() }))
+  .input(z.object({ id: z.number() }))
+  .mutation(async ({ input }) => {
+    const existingPost = await db.query.posts.findFirst({
+      where: eq(posts.id, input.id),
+    });
+
+    if (!existingPost) {
+      throw new Error(
+        "Post not found or you don't have permission to delete it."
+      );
+    }
+
+    // First, remove all relationships (postsToCategories)
+    await db
+      .delete(postsToCategories)
+      .where(eq(postsToCategories.postId, input.id));
+
+    // Then, delete the post itself
+    const [deletedPost] = await db
+      .delete(posts)
+      .where(eq(posts.id, input.id))
+      .returning();
+
+    if (!deletedPost) {
+      throw new Error("Failed to delete post.");
+    }
+
+    return { success: true, postId: deletedPost.id };
+  }),
+
+  togglePublishStatus: publicProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        currentStatus: z.boolean(),
+      })
+    )
     .mutation(async ({ input }) => {
-      const existingPost = await db.query.posts.findFirst({
-        where: eq(posts.id, input.id),
-      });
-
-      if (!existingPost) {
-        throw new Error(
-          "Post not found or you don't have permission to delete it."
-        );
-      }
-
-      const [deletedPost] = await db
-        .delete(posts)
+      const updatedPost = await db
+        .update(posts)
+        .set({ published: !input.currentStatus })
         .where(eq(posts.id, input.id))
-        .returning();
+        .returning(); // Use .returning() to get the updated record
 
-      if (!deletedPost) {
-        throw new Error("Failed to delete post.");
+      if (updatedPost.length === 0) {
+        throw new Error("Post not found or could not be updated.");
       }
 
-      return { success: true, postId: deletedPost.id };
+      return updatedPost[0];
     }),
-
-    togglePublishStatus: publicProcedure
-        .input(
-            z.object({
-                id: z.number(),
-                currentStatus: z.boolean(),
-            })
-        )
-        .mutation(async ({ input }) => {
-            const updatedPost = await db
-                .update(posts)
-                .set({ published: !input.currentStatus })
-                .where(eq(posts.id, input.id))
-                .returning(); // Use .returning() to get the updated record
-
-            if (updatedPost.length === 0) {
-                throw new Error("Post not found or could not be updated.");
-            }
-
-            return updatedPost[0];
-        }),
 });
