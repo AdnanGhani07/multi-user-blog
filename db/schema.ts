@@ -21,8 +21,8 @@ export const categories = pgTable('categories', {
 });
 
 export const postsToCategories = pgTable('posts_to_categories', {
-  postId: serial('post_id').notNull().references(() => posts.id),
-  categoryId: serial('category_id').notNull().references(() => categories.id),
+  postId: serial('post_id').notNull().references(() => posts.id, { onDelete: 'cascade' }),
+  categoryId: serial('category_id').notNull().references(() => categories.id, { onDelete: 'cascade' }),
 });
 
 export const postsRelations = relations(posts, ({ many }) => ({
